@@ -7,7 +7,7 @@ class PackagerTGUI(ConanFile):
     branch = 'stable'
     settings = 'os', 'compiler', 'arch', 'build_type'
     options = {'shared': [True, False], 'cpp17': [True, False]}
-    default_options = 'shared=True', 'cpp17=True'
+    default_options = 'shared=True', 'cpp17=False'
     generators = 'cmake'
     license = 'zlib/png'
     url='https://github.com/texus/TGUI'
@@ -39,6 +39,12 @@ class PackagerTGUI(ConanFile):
     def configure_cmake(self):
         cmake = CMake(self)
         cmake.definitions["TGUI_SHARED_LIBS"] = self.options.shared
+        if self.options.shared:
+            cmake.definitions["BUILD_SHARED_LIBS"] = "ON"
+            cmake.definitions["BUILD_STATIC_LIBS"] = "OFF"
+        else:
+            cmake.definitions["BUILD_SHARED_LIBS"] = "OFF"
+            cmake.definitions["BUILD_STATIC_LIBS"] = "ON"
         if self.options.cpp17:
             cmake.definitions["TGUI_USE_CPP17"] = True
 
