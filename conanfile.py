@@ -25,8 +25,8 @@ class PackagerTGUI(ConanFile):
         print(os.getcwd())
         os.listdir(os.getcwd())
         tools.replace_in_file("./TGUI/src/TGUI/CMakeLists.txt",
-         "if(DEFINED SFML_LIBRARIES)\n    # SFML found via FindSFML.cmake\n    target_include_directories(tgui PRIVATE ${SFML_INCLUDE_DIR})\n    target_link_libraries(tgui PRIVATE ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})\nelse()\n    # SFML found via SFMLConfig.cmake\n    target_link_libraries(tgui PRIVATE sfml-graphics)\nendif()",
-         "include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)\nconan_basic_setup()\ntarget_link_libraries(tgui ${CONAN_LIBS})")
+         "if(DEFINED SFML_LIBRARIES)\r\n    # SFML found via FindSFML.cmake\r\n    target_include_directories(tgui PRIVATE ${SFML_INCLUDE_DIR})\r\n    target_link_libraries(tgui PRIVATE ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})\r\nelse()\r\n    # SFML found via SFMLConfig.cmake\r\n    target_link_libraries(tgui PRIVATE sfml-graphics)\r\nendif()",
+         "include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)\r\nconan_basic_setup()\r\ntarget_link_libraries(tgui ${CONAN_LIBS})")
 
     def build(self):
         if self.settings.compiler == 'Visual Studio':
