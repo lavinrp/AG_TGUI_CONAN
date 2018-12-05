@@ -27,6 +27,41 @@ class PackagerTGUI(ConanFile):
         tools.replace_in_file("./TGUI/src/TGUI/CMakeLists.txt",
          "if(DEFINED SFML_LIBRARIES)\r\n    # SFML found via FindSFML.cmake\r\n    target_include_directories(tgui PRIVATE ${SFML_INCLUDE_DIR})\r\n    target_link_libraries(tgui PRIVATE ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})\r\nelse()\r\n    # SFML found via SFMLConfig.cmake\r\n    target_link_libraries(tgui PRIVATE sfml-graphics)\r\nendif()",
          "include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)\r\nconan_basic_setup()\r\ntarget_link_libraries(tgui ${CONAN_LIBS})")
+        # tools.replace_in_file("./TGUI/CMakeLists.txt", "fizz", "buzz")
+
+         # tools.replace_in_file("./TGUI/CMakeLists.txt",
+         # '         # Find sfml\r\nif(TGUI_OS_WINDOWS AND TGUI_COMPILER_MSVC) # Also look for the main component when using Visual Studio\r\n    find_package(SFML 2 COMPONENTS main graphics window system)\r\nelseif(TGUI_OS_ANDROID)  # Search for SFML in the android NDK (if no other directory is specified)\r\n    find_package(SFML 2 COMPONENTS graphics window system PATHS "${CMAKE_ANDROID_NDK}/sources/third_party/sfml/lib/${CMAKE_ANDROID_ARCH_ABI}/cmake/SFML")\r\nelseif(TGUI_OS_IOS)  # Use the find_host_package macro from the toolchain on iOS\r\n    find_host_package(SFML 2 COMPONENTS main graphics window system)\r\nelse()\r\n    find_package(SFML 2 COMPONENTS graphics window system)\r\nendif()\r\n# find_package couldn\'t find SFML\r\nif(NOT SFML_FOUND)\r\n     set(SFML_DIR "" CACHE PATH "Path to SFMLConfig.cmake")\r\n    set(SFML_ROOT "" CACHE PATH "SFML root directory")\r\n     message(FATAL_ERROR "CMake couldn\'t find SFML.\nEither set SFML_DIR to the directory containing SFMLConfig.cmake or set the SFML_ROOT entry to SFML\'s root directory (containing \"include\" and \"lib\" directories).")\r\nendif()\r\n',
+         # "include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)\r\nconan_basic_setup()\r\ntarget_link_libraries(tgui ${CONAN_LIBS})"
+         # )
+        # tools.replace_in_file("./TGUI/CMakeLists.txt", 'if(TGUI_OS_WINDOWS AND TGUI_COMPILER_MSVC) # Also look for the main component when using Visual Studio\r\n    find_package(SFML 2 COMPONENTS main graphics window system)\r\nelseif(TGUI_OS_ANDROID)  # Search for SFML in the android NDK (if no other directory is specified)\r\n    find_package(SFML 2 COMPONENTS graphics window system PATHS "${CMAKE_ANDROID_NDK}/sources/third_party/sfml/lib/${CMAKE_ANDROID_ARCH_ABI}/cmake/SFML")\r\nelseif(TGUI_OS_IOS)  # Use the find_host_package macro from the toolchain on iOS\r\n    find_host_package(SFML 2 COMPONENTS main graphics window system)\r\nelse()\r\n    find_package(SFML 2 COMPONENTS graphics window system)\r\nendif()\r\n\r\n# find_package couldn\'t find SFML\r\nif(NOT SFML_FOUND)\r\n    set(SFML_DIR "" CACHE PATH "Path to SFMLConfig.cmake")\r\n    set(SFML_ROOT "" CACHE PATH "SFML root directory")\r\n    message(FATAL_ERROR "CMake couldn\'t find SFML.\nEither set SFML_DIR to the directory containing SFMLConfig.cmake or set the SFML_ROOT entry to SFML\'s root directory (containing \"include\" and \"lib\" directories).")\r\nendif()\r\n', "include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)\r\nconan_basic_setup()\r\ntarget_link_libraries(tgui ${CONAN_LIBS})")
+
+        # tools.replace_in_file("./TGUI/CMakeLists.txt",
+        # "(?<=# Find sfml)(.*)(?=# Set the path for the libraries)",
+        # "include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)\r\nconan_basic_setup()\r\ntarget_link_libraries(tgui ${CONAN_LIBS})")
+
+        str1 = "if(TGUI_OS_WINDOWS AND TGUI_COMPILER_MSVC) # Also look for the main component when using Visual Studio"
+        str2 = "    find_package(SFML 2 COMPONENTS main graphics window system)"
+        str3 = "elseif(TGUI_OS_ANDROID)  # Search for SFML in the android NDK (if no other directory is specified)"
+        str4 = '    find_package(SFML 2 COMPONENTS graphics window system PATHS "${CMAKE_ANDROID_NDK}/sources/third_party/sfml/lib/${CMAKE_ANDROID_ARCH_ABI}/cmake/SFML")'
+        str5 = "elseif(TGUI_OS_IOS)  # Use the find_host_package macro from the toolchain on iOS"
+        str6 = "    find_host_package(SFML 2 COMPONENTS main graphics window system)"
+        str7 = "else()"
+        str8 = "    find_package(SFML 2 COMPONENTS graphics window system)"
+        str9 = "endif()"
+        str10 = ""
+        str11 = "# find_package couldn't find SFML"
+        str12 = "if(NOT SFML_FOUND)"
+        str13 = '    set(SFML_DIR "" CACHE PATH "Path to SFMLConfig.cmake")'
+        str14 = '    set(SFML_ROOT "" CACHE PATH "SFML root directory")'
+        str15 = '    message(FATAL_ERROR "CMake couldn\'t find SFML.\\nEither set SFML_DIR to the directory containing SFMLConfig.cmake or set the SFML_ROOT entry to SFML\'s root directory (containing \\"include\\" and \\"lib\\" directories).")'
+        str16 = "endif()"
+        strs = [str1, str2, str3, str4, str5, str6, str7, str8, str9, str10, str11, str12, str13, str14, str15, str16]
+        
+        find_sfml_string = ""
+        for string in strs:
+            find_sfml_string += string + "\r\n"
+        
+        tools.replace_in_file("./TGUI/CMakeLists.txt", find_sfml_string, "" )
 
     def build(self):
         if self.settings.compiler == 'Visual Studio':
@@ -34,6 +69,7 @@ class PackagerTGUI(ConanFile):
                 cmake = self.configure_cmake()
         else:
             cmake = self.configure_cmake()
+        self.build_folder = os.getcwd() + "/TGUI"
         cmake.build()
 
     def configure_cmake(self):
@@ -51,7 +87,14 @@ class PackagerTGUI(ConanFile):
         #os.rename(self._source_subfolder + '/extlibs', self._source_subfolder + '/ext')
         #cmake.configure(build_folder=self._build_subfolder)
         #os.rename(self._source_subfolder + '/ext', self._source_subfolder + '/extlibs')
+
+        self.run("cd ./TGUI")
+        print(os.getcwd())
+        input("about to configure")
+        self.source_folder = os.getcwd() + "/TGUI"
         cmake.configure()
+        self.run("cd ..")
+
         return cmake
 
     def add_libraries_from_pc(self, library, static=None):
