@@ -67,7 +67,10 @@ class PackagerTGUI(ConanFile):
         
         find_sfml_string = ""
         for string in strs:
-            find_sfml_string += string + "\r\n"
+            if os.name == "nt":
+                find_sfml_string += string + "\r\n"
+            else:
+                find_sfml_string += string + "\n"
         
         tools.replace_in_file("./TGUI/CMakeLists.txt", find_sfml_string, "" )
 
