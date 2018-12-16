@@ -1,0 +1,19 @@
+[settings]
+ os=Linux
+ os_build=Linux
+ arch=x86_64
+ arch_build=x86_64
+ compiler=gcc
+ compiler.libcxx=libstdc++11
+ compiler.version=6
+
+ [options]
+ sfml:shared=True
+ sfml:window=True
+ sfml:graphics=True
+ sfml:network=True
+ tgui:shared=True
+ tgui:cpp17=True
+
+
+

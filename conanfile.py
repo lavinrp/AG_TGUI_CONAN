@@ -34,7 +34,7 @@ class PackagerTGUI(ConanFile):
         include_sfml_str5 = "    # SFML found via SFMLConfig.cmake"
         include_sfml_str6 = "    target_link_libraries(tgui PRIVATE sfml-graphics)"
         include_sfml_str7 = "endif()"
-        include_sfml_str_array [include_sfml_str0, include_sfml_str1, include_sfml_str2, include_sfml_str3, include_sfml_str4, include_sfml_str5, include_sfml_str6, include_sfml_str7]
+        include_sfml_str_array = [include_sfml_str0, include_sfml_str1, include_sfml_str2, include_sfml_str3, include_sfml_str4, include_sfml_str5, include_sfml_str6, include_sfml_str7]
         combined_sfml_include_string = ""
         for include_sfml_string in include_sfml_str_array:
             combined_sfml_include_string += include_sfml_string
@@ -67,7 +67,10 @@ class PackagerTGUI(ConanFile):
         
         find_sfml_string = ""
         for string in strs:
-            find_sfml_string += string + "\r\n"
+            if os.name == "nt":
+                find_sfml_string += string + "\r\n"
+            else:
+                find_sfml_string += string + "\n"
         
         tools.replace_in_file("./TGUI/CMakeLists.txt", find_sfml_string, "" )
 
@@ -98,7 +101,7 @@ class PackagerTGUI(ConanFile):
 
         self.run("cd ./TGUI")
         print(os.getcwd())
-        input("about to configure")
+        # input("about to configure")
         self.source_folder = os.getcwd() + "/TGUI"
         cmake.configure()
         self.run("cd ..")
